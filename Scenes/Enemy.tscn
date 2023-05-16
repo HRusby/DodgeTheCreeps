@@ -1,0 +1,66 @@
+[gd_scene load_steps=10 format=3 uid="uid://bl18r1mrfhl6u"]
+
+[ext_resource type="Script" path="res://Scenes/Enemy.cs" id="1_d0pm1"]
+[ext_resource type="Texture2D" uid="uid://besjnsakkbqa8" path="res://art/enemyFlyingAlt_1.png" id="1_i1ofl"]
+[ext_resource type="Texture2D" uid="uid://jy4kwlf8g7fo" path="res://art/enemyFlyingAlt_2.png" id="2_6dw2h"]
+[ext_resource type="Texture2D" uid="uid://edlqkbrjlyjj" path="res://art/enemySwimming_1.png" id="3_7cm0g"]
+[ext_resource type="Texture2D" uid="uid://cjj7bor2egfrd" path="res://art/enemySwimming_2.png" id="4_oojcp"]
+[ext_resource type="Texture2D" uid="uid://cx7j4tfmo8i5u" path="res://art/enemyWalking_1.png" id="5_n714h"]
+[ext_resource type="Texture2D" uid="uid://b8fu7oianud68" path="res://art/enemyWalking_2.png" id="6_im28f"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_os771"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_i1ofl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_6dw2h")
+}],
+"loop": true,
+"name": &"fly",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_7cm0g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_oojcp")
+}],
+"loop": true,
+"name": &"swim",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_n714h")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_im28f")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_kmk3m"]
+radius = 36.0
+height = 100.0
+
+[node name="RigidBody2D" type="RigidBody2D"]
+collision_mask = 0
+gravity_scale = 0.0
+script = ExtResource("1_d0pm1")
+metadata/_edit_group_ = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.75, 0.75)
+sprite_frames = SubResource("SpriteFrames_os771")
+animation = &"walk"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_kmk3m")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
