@@ -8,32 +8,45 @@ public partial class Main : Node
 	public PackedScene MobScene { get; set; }
 
 	private int _score;
+	private hud _hud;
+	private Player _player;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		NewGame();
+		_hud = GetNode<hud>("HUD");
+		_hud.StartGame += NewGame;
+		_player = GetNode<Player>("Player");
+		_player.Hit += GameOver;
 	}
 	
 	private void GameOver()
 	{
 		GetNode<Timer>("MobTimer").Stop();
 		GetNode<Timer>("ScoreTimer").Stop();
+		_hud.ShowGameOver();
+		GetNode<AudioStreamPlayer>("Music").Stop();
+		GetNode<AudioStreamPlayer>("DeathSound").Play();
 	}
 	
-	public void NewGame()
+	private void NewGame()
 	{
+		GetTree().CallGroup("Enemies", Node.MethodName.QueueFree);
 		_score = 0;
-
 		var player = GetNode<Player>("Player");
 		var startPosition = GetNode<Marker2D>("StartPosition");
 		player.Start(startPosition.Position);
 
 		GetNode<Timer>("StartTimer").Start();
+		
+		_hud.UpdateScore(_score);
+		_hud.ShowMessage("Get Ready!");
+		GetNode<AudioStreamPlayer>("Music").Play();
 	}
 	
 	private void _on_score_timer_timeout()
 	{
 		_score++;
+		_hud.UpdateScore(_score);
 	}
 	
 	private void _on_start_timer_timeout()
